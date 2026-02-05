@@ -1,6 +1,8 @@
 ﻿using Klipp_StyleSalong.Data;
 using Klipp_StyleSalong.DTOs;
+using Klipp_StyleSalong.Models;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace Klipp_StyleSalong.Endpoints
 {
@@ -27,6 +29,35 @@ namespace Klipp_StyleSalong.Endpoints
                 }
 
                 return Results.Ok(bookings);
+
+            });
+
+            app.MapPost("/bookings", async (SalonDbContext context, BookingDto newBooking) =>
+            {
+                var validationContext = new ValidationContext(newBooking);
+
+                var validationResults = new List<ValidationResult>();
+
+                bool isValid = Validator.TryValidateObject(newBooking, validationContext, validationResults, true);
+
+                if (!isValid)
+                {
+                    return Results.BadRequest();
+                }
+
+                var booking = new Booking()
+                {
+                    Date = newBooking.Date,
+                    Time = newBooking.Time,
+                    Hairdresser = newBooking.Hairdresser,
+                    CustomerName = newBooking.CustomerName,
+                    PhoneNr = newBooking.PhoneNr
+                };
+
+                context.Bookings.Add(booking);
+                await context.SaveChangesAsync();
+
+                return Results.Ok(booking);
 
             });
         }
