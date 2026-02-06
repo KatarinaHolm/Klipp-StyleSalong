@@ -6,10 +6,12 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Klipp_StyleSalong.Endpoints
 {
+    //Lägg till kommentarer med fluent, ev. extra uppgifter. 
     public class BookingEndpoints
     {
         public static void RegisterEndpoints(WebApplication app)
         {
+
             app.MapGet("/bookings", async (SalonDbContext context) =>
             {                
                 var bookings = await context.Bookings
@@ -30,7 +32,10 @@ namespace Klipp_StyleSalong.Endpoints
 
                 return Results.Ok(bookings);
 
-            });
+            })
+            .WithSummary("")
+            .WithDescription("");
+
 
             app.MapPost("/bookings", async (SalonDbContext context, BookingDto newBooking) =>
             {
@@ -59,7 +64,26 @@ namespace Klipp_StyleSalong.Endpoints
 
                 return Results.Ok(booking);
 
-            });
+            })
+            .WithSummary("")
+            .WithDescription("");
+
+            app.MapDelete("/bookings/{id}", async (SalonDbContext context, int id) =>
+            {
+                var booking = await context.Bookings.FindAsync(id);
+
+                if (booking == null)
+                {
+                    return Results.NotFound();
+                }
+
+                context.Bookings.Remove(booking);
+                await context.SaveChangesAsync();
+
+                return Results.NoContent();
+            })
+            .WithSummary("")
+            .WithDescription("");
         }
     }
 }

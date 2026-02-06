@@ -8,6 +8,10 @@ namespace Klipp_StyleSalong
 {
     public class Program
     {
+        // Frågor:
+        // Telefonnummer attributet kollade inte att det var tillräckligt många siffror, kan man göra det på nåt sätt? 
+        // Är det korrekt att ta emot id för att ta bort bokning?
+        // Vad ska man skriva i en ReadMe och hur strukturerar man den?
         public static void Main(string[] args)
         {           
             var builder = WebApplication.CreateBuilder(args);
