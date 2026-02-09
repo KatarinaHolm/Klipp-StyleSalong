@@ -12,11 +12,15 @@ This is an exercise in creating Minimal REST-API, validation and async programmi
 _Endpoints_  
 GET  
 URL: /bookings  
-Description: Returns all the bookings in the database. Booking data include: Date, Time, Hairdresser, CustomerName, PhoneNr.
+Description: Returns all the bookings in the database by pagination. Query params are page and pageSize. Booking data include: Date, Time, Hairdresser, CustomerName, PhoneNr. 
+
+GET  
+URL: /bookings/date/{date} 
+Description: Returns all the bookings on the requested date (route param). Booking data include: Date, Time, Hairdresser, CustomerName, PhoneNr.
 
 POST  
 URL: /bookings  
-Description: Receives booking information (JSON) in body to save as booking in the database. Requested data is: Date, Time, Hairdresser, CustomerName, PhoneNr.
+Description: Receives booking information (JSON) in body to save as booking in the database. Requested data is: Date, Time, Hairdresser, CustomerName, PhoneNr. Validates that customer has given a PhoneNr with digits and their name in booking. Also check that booking time hasn't already passed. 
 
 DELETE  
 URL: /bookings/{id}  
