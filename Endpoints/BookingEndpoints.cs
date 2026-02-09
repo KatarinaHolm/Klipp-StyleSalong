@@ -11,7 +11,7 @@ namespace Klipp_StyleSalong.Endpoints
         public static void RegisterEndpoints(WebApplication app)
         {
 
-            app.MapGet("/bookings", async (SalonDbContext context, int page, int pageSize) =>
+            app.MapGet("/bookings", async (SalonDbContext context, int page = 1, int pageSize = 10) =>
             {                
                 var bookings = await context.Bookings
                     .Select(b => new BookingDto
@@ -35,7 +35,7 @@ namespace Klipp_StyleSalong.Endpoints
 
             })
             .WithSummary("All bookings by pagination")
-            .WithDescription("Query params are page and pageSize. Booking data include: Date, Time, Hairdresser, CustomerName, PhoneNr.");
+            .WithDescription("Query params are page and pageSize, default page=1 and pageSize=10. Booking data include: Date, Time, Hairdresser, CustomerName, PhoneNr.");
 
 
             app.MapGet("/bookings/date/{date}", async (SalonDbContext context, DateOnly date) =>
@@ -61,7 +61,7 @@ namespace Klipp_StyleSalong.Endpoints
 
             })
             .WithSummary("All the bookings on the requested date")
-            .WithDescription("Takes date as route param). Booking data include: Date, Time, Hairdresser, CustomerName, PhoneNr.");
+            .WithDescription("Takes date as route param. Booking data include: Date, Time, Hairdresser, CustomerName, PhoneNr.");
 
 
             app.MapPost("/bookings", async (SalonDbContext context, BookingDto newBooking) =>
@@ -99,7 +99,7 @@ namespace Klipp_StyleSalong.Endpoints
                 return Results.Ok(booking);
 
             })
-            .WithSummary("Receives booking save in the database. ")
+            .WithSummary("Receives booking and saves in the database. ")
             .WithDescription("Receives booking information (JSON) in body to save as booking in the database. Requested data is: Date, Time, Hairdresser, CustomerName, PhoneNr. Validates that customer has given a PhoneNr with digits and their name in booking. Also check that booking time hasn't already passed.");
 
             app.MapDelete("/bookings/{id}", async (SalonDbContext context, int id) =>
