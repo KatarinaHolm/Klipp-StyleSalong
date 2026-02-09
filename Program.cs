@@ -1,7 +1,10 @@
 
 using Klipp_StyleSalong.Data;
 using Klipp_StyleSalong.Endpoints;
+using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualBasic;
 using Scalar.AspNetCore;
 
 namespace Klipp_StyleSalong
@@ -14,6 +17,8 @@ namespace Klipp_StyleSalong
         // Vad ska man skriva i en ReadMe och hur strukturerar man den?
         // I vilket steg ska man ta bort appsettings.json och skapa repo i GitHub? Blev problem då jag hade skrivit in ConnectionString och skapade repo lokalt.
         // Bör man lägga till nån kontroll för skip/take eller ha med andra parametrar för paginering?
+        // *AI-förslag : Sätt ett tak: Begränsa alltid pageSize (t.ex. max 100) så att en användare inte kan krascha servern genom att be om en miljon rader.
+        // *AI-förslag: Returnera Metadata: Skicka med information i svaret om hur många sidor som finns totalt, så att frontend vet hur många knappar de ska rita ut.
 
         public static void Main(string[] args)
         {           

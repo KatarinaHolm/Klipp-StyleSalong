@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Klipp_StyleSalong.Endpoints
 {
-    //Lägg till kommentarer med fluent, ev. extra uppgifter. 
+    //Lägg till kommentarer med fluent, lägg till på ReadMe pagingering och GET datum, + Avancerad validering: Se till att en tid inte kan bokas om den redan passert
     public class BookingEndpoints
     {
         public static void RegisterEndpoints(WebApplication app)
@@ -27,7 +27,33 @@ namespace Klipp_StyleSalong.Endpoints
                     .Take(pageSize)
                     .ToListAsync();
 
-                if (bookings == null)
+                if (!bookings.Any())
+                {
+                    return Results.NoContent();
+                }
+
+                return Results.Ok(bookings);
+
+            })
+            .WithSummary("")
+            .WithDescription("");
+
+
+            app.MapGet("/bookings/date/{date}", async (SalonDbContext context, DateOnly date) =>
+            {
+                var bookings = await context.Bookings
+                    .Where(b => b.Date == date)
+                    .Select(b => new BookingDto
+                    {
+                        Date = b.Date,
+                        Time = b.Time,
+                        Hairdresser = b.Hairdresser,
+                        CustomerName = b.CustomerName,
+                        PhoneNr = b.PhoneNr
+                    })                  
+                    .ToListAsync();
+
+                if (!bookings.Any())
                 {
                     return Results.NoContent();
                 }
