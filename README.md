@@ -12,7 +12,7 @@ This is an exercise in creating Minimal REST-API, validation and async programmi
 _Endpoints_  
 GET  
 URL: /bookings  
-Description: Returns all the bookings in the database by pagination. Query params are page and pageSize. Booking data include: Date, Time, Hairdresser, CustomerName, PhoneNr. 
+Description: Returns all the bookings in the database by pagination. Query params are page and pageSize, has default page=1 and pageSize=10. Booking data include: Date, Time, Hairdresser, CustomerName, PhoneNr. 
 
 GET  
 URL: /bookings/date/{date} 
