@@ -12,7 +12,7 @@ namespace Klipp_StyleSalong.Endpoints
         public static void RegisterEndpoints(WebApplication app)
         {
 
-            app.MapGet("/bookings", async (SalonDbContext context) =>
+            app.MapGet("/bookings", async (SalonDbContext context, int page, int pageSize) =>
             {                
                 var bookings = await context.Bookings
                     .Select(b => new BookingDto
@@ -23,6 +23,8 @@ namespace Klipp_StyleSalong.Endpoints
                         CustomerName = b.CustomerName,
                         PhoneNr = b.PhoneNr
                     })
+                    .Skip((page - 1) * pageSize)
+                    .Take(pageSize)
                     .ToListAsync();
 
                 if (bookings == null)

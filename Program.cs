@@ -12,6 +12,9 @@ namespace Klipp_StyleSalong
         // Telefonnummer attributet kollade inte att det var tillräckligt många siffror, kan man göra det på nåt sätt? 
         // Är det korrekt att ta emot id för att ta bort bokning?
         // Vad ska man skriva i en ReadMe och hur strukturerar man den?
+        // I vilket steg ska man ta bort appsettings.json och skapa repo i GitHub? Blev problem då jag hade skrivit in ConnectionString och skapade repo lokalt.
+        // Bör man lägga till nån kontroll för skip/take eller ha med andra parametrar för paginering?
+
         public static void Main(string[] args)
         {           
             var builder = WebApplication.CreateBuilder(args);
