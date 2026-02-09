@@ -5,8 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 
 namespace Klipp_StyleSalong.Endpoints
-{
-    //Lägg till kommentarer med fluent, lägg till på ReadMe pagingering och GET datum, + Avancerad validering: Se till att en tid inte kan bokas om den redan passert
+{    
     public class BookingEndpoints
     {
         public static void RegisterEndpoints(WebApplication app)
@@ -35,8 +34,8 @@ namespace Klipp_StyleSalong.Endpoints
                 return Results.Ok(bookings);
 
             })
-            .WithSummary("")
-            .WithDescription("");
+            .WithSummary("All bookings by pagination")
+            .WithDescription("Query params are page and pageSize. Booking data include: Date, Time, Hairdresser, CustomerName, PhoneNr.");
 
 
             app.MapGet("/bookings/date/{date}", async (SalonDbContext context, DateOnly date) =>
@@ -61,8 +60,8 @@ namespace Klipp_StyleSalong.Endpoints
                 return Results.Ok(bookings);
 
             })
-            .WithSummary("")
-            .WithDescription("");
+            .WithSummary("All the bookings on the requested date")
+            .WithDescription("Takes date as route param). Booking data include: Date, Time, Hairdresser, CustomerName, PhoneNr.");
 
 
             app.MapPost("/bookings", async (SalonDbContext context, BookingDto newBooking) =>
@@ -76,6 +75,13 @@ namespace Klipp_StyleSalong.Endpoints
                 if (!isValid)
                 {
                     return Results.BadRequest();
+                }
+
+                var bookingTime = newBooking.Date.ToDateTime(newBooking.Time);
+                
+                if (bookingTime < DateTime.Now)
+                {
+                    return Results.BadRequest("Tiden har passerat");
                 }
 
                 var booking = new Booking()
@@ -93,8 +99,8 @@ namespace Klipp_StyleSalong.Endpoints
                 return Results.Ok(booking);
 
             })
-            .WithSummary("")
-            .WithDescription("");
+            .WithSummary("Receives booking save in the database. ")
+            .WithDescription("Receives booking information (JSON) in body to save as booking in the database. Requested data is: Date, Time, Hairdresser, CustomerName, PhoneNr. Validates that customer has given a PhoneNr with digits and their name in booking. Also check that booking time hasn't already passed.");
 
             app.MapDelete("/bookings/{id}", async (SalonDbContext context, int id) =>
             {
@@ -110,8 +116,8 @@ namespace Klipp_StyleSalong.Endpoints
 
                 return Results.NoContent();
             })
-            .WithSummary("")
-            .WithDescription("");
+            .WithSummary("Removes a booking by id")
+            .WithDescription("Removes a booking from database by booking id. Id is necessary to find the booking and delete it in the system.");
         }
     }
 }
